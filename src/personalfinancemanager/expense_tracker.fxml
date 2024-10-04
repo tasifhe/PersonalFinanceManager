@@ -15,7 +15,6 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalfinancemanager.Expense_trackerController">
     <children>
-        <!-- Header -->
         <HBox alignment="CENTER" layoutX="0.0" layoutY="0.0" prefHeight="60.0" prefWidth="800.0" style="-fx-background-color: #34495E;">
             <children>
                 <Label text="Expense Tracker" textFill="WHITE">
@@ -48,7 +47,9 @@
                         <TextField fx:id="descriptionField" promptText="Enter Description" />
                     </children>
                 </HBox>
-                <Button fx:id="addExpenseButton" mnemonicParsing="false" onAction="#handleAddExpense" style="-fx-background-color: #4CAF50;" text="Add Expense" textFill="WHITE" />
+                <Button fx:id="addExpenseButton" mnemonicParsing="false" onAction="#handleAddExpense" prefHeight="36.0" prefWidth="85.0" style="-fx-background-color: #4CAF50;" text="Add Expense" textFill="WHITE" />
+              <!-- Header -->
+              <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBack" prefHeight="36.0" prefWidth="80.0" style="-fx-background-color: #3498DB;" text="Dashboard" textFill="WHITE" />
             </children>
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
