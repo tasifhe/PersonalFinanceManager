@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="personalfinancemanager.Expense_trackerController">
+    <children>
+        <!-- Header -->
+        <HBox alignment="CENTER" prefHeight="60.0" prefWidth="800.0" layoutX="0.0" layoutY="0.0" style="-fx-background-color: #34495E;">
+            <children>
+                <Label text="Expense Tracker" textFill="WHITE">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets left="20.0" />
+            </padding>
+        </HBox>
+        
+        <!-- Expense Form -->
+        <VBox layoutX="20.0" layoutY="80.0" prefHeight="200.0" prefWidth="760.0" spacing="10.0">
+            <children>
+                <HBox spacing="10.0">
+                    <children>
+                        <Label text="Date:"/>
+                        <DatePicker fx:id="datePicker"/>
+                        <Label text="Category:"/>
+                        <ComboBox fx:id="categoryComboBox" promptText="Select Category"/>
+                    </children>
+                </HBox>
+                <HBox spacing="10.0">
+                    <children>
+                        <Label text="Amount:"/>
+                        <TextField fx:id="amountField" promptText="Enter Amount"/>
+                        <Label text="Description:"/>
+                        <TextField fx:id="descriptionField" promptText="Enter Description"/>
+                    </children>
+                </HBox>
+                <Button fx:id="addExpenseButton" text="Add Expense" mnemonicParsing="false" style="-fx-background-color: #4CAF50;" textFill="WHITE"/>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </VBox>
+        
+        <!-- Expense Table -->
+        <TableView fx:id="expenseTable" layoutX="20.0" layoutY="300.0" prefHeight="280.0" prefWidth="760.0">
+            <columns>
+                <TableColumn fx:id="dateColumn" text="Date" prefWidth="120.0"/>
+                <TableColumn fx:id="categoryColumn" text="Category" prefWidth="120.0"/>
+                <TableColumn fx:id="amountColumn" text="Amount" prefWidth="120.0"/>
+                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="280.0"/>
+                <TableColumn fx:id="actionColumn" text="Action" prefWidth="120.0">
+                    <!-- Action buttons for editing and deleting rows will be added programmatically -->
+                </TableColumn>
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

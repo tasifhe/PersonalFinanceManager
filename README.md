@@ -1,0 +1,2 @@
+# PersonalFinanceManager
+ Simple JavaFX Project
