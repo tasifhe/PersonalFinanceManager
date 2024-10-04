@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package personalfinancemanager;
 
 import java.io.IOException;
@@ -9,14 +5,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import java.time.LocalDate;
-import java.util.ResourceBundle;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,70 +14,49 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.time.LocalDate;
+import javafx.scene.layout.HBox;
 
-/**
- * FXML Controller class
- *
- * @author tasif
- */
 public class Expense_trackerController implements Initializable {
 
-    @FXML
-    private DatePicker datePicker;
-    @FXML
-    private ComboBox<String> categoryComboBox;
-    @FXML
-    private TextField amountField;
-    @FXML
-    private TextField descriptionField;
-    @FXML
-    private Button addExpenseButton;
-    @FXML
-    private TableView<Expense> expenseTable;
-    @FXML
-    private TableColumn<Expense, LocalDate> dateColumn;
-    @FXML
-    private TableColumn<Expense, String> categoryColumn;
-    @FXML
-    private TableColumn<Expense, Double> amountColumn;
-    @FXML
-    private TableColumn<Expense, String> descriptionColumn;
-    @FXML
-    private TableColumn<Expense, String> actionColumn;
-    
-    // Observable list to hold the expenses
+    @FXML private DatePicker datePicker;
+    @FXML private ComboBox<String> categoryComboBox;
+    @FXML private TextField amountField;
+    @FXML private TextField descriptionField;
+    @FXML private Button addExpenseButton;
+    @FXML private TableView<Expense> expenseTable;
+    @FXML private TableColumn<Expense, LocalDate> dateColumn;
+    @FXML private TableColumn<Expense, String> categoryColumn;
+    @FXML private TableColumn<Expense, Double> amountColumn;
+    @FXML private TableColumn<Expense, String> descriptionColumn;
+    @FXML private TableColumn<Expense, Void> actionColumn;
+    @FXML private Button backButton;
+    @FXML private VBox expenseTrackerController;
+
     private ObservableList<Expense> expenseList;
-    @FXML
-    private Button backButton;
-    @FXML
-    private VBox expenseTrackerController;
+    private Expense currentlyEditing = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Initialize the ComboBox with categories
         categoryComboBox.setItems(FXCollections.observableArrayList("Food", "Transport", "Utilities", "Entertainment", "Others"));
         
-        // Initialize the TableView columns
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         
-        // Initialize the list to hold expenses
         expenseList = FXCollections.observableArrayList();
         expenseTable.setItems(expenseList);
         
-        // Add button action handlers in the actionColumn (like delete)
         addActionColumn();
+        
+        addExpenseButton.setText("Add Expense");
     }    
     
-    //Adds a new expense entry to the TableView when the Add button is clicked.
     @FXML
-    private void handleAddExpense() {
+    private void handleAddOrUpdateExpense() {
         LocalDate date = datePicker.getValue();
         String category = categoryComboBox.getValue();
         String description = descriptionField.getText();
@@ -105,24 +74,38 @@ public class Expense_trackerController implements Initializable {
             return;
         }
 
-        // Create a new expense object and add it to the list
-        Expense expense = new Expense(date, category, amount, description);
-        expenseList.add(expense);
+        if (currentlyEditing == null) {
+            // Add new expense
+            Expense expense = new Expense(date, category, amount, description);
+            expenseList.add(expense);
+        } else {
+            // Update existing expense
+            currentlyEditing.setDate(date);
+            currentlyEditing.setCategory(category);
+            currentlyEditing.setAmount(amount);
+            currentlyEditing.setDescription(description);
+            expenseTable.refresh();
+            currentlyEditing = null;
+            addExpenseButton.setText("Add Expense");
+        }
 
-        // Clear the input fields after adding
-        datePicker.setValue(null);
-        categoryComboBox.setValue(null);
-        amountField.clear();
-        descriptionField.clear();
+        clearInputFields();
     }
     
-    // Adds a delete button to each row in the action column.
     private void addActionColumn() {
         actionColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button editButton = new Button("Edit");
             private final Button deleteButton = new Button("Delete");
 
             {
+                editButton.setStyle("-fx-background-color: #3498DB; -fx-text-fill: white;");
                 deleteButton.setStyle("-fx-background-color: #E74C3C; -fx-text-fill: white;");
+                
+                editButton.setOnAction(event -> {
+                    Expense expense = getTableView().getItems().get(getIndex());
+                    populateFormForEdit(expense);
+                });
+                
                 deleteButton.setOnAction(event -> {
                     Expense expense = getTableView().getItems().get(getIndex());
                     expenseList.remove(expense);
@@ -130,18 +113,34 @@ public class Expense_trackerController implements Initializable {
             }
 
             @Override
-            protected void updateItem(String item, boolean empty) {
+            protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(deleteButton);
+                    HBox buttons = new HBox(5, editButton, deleteButton);
+                    setGraphic(buttons);
                 }
             }
         });
     }
 
-    // Shows an alert dialog with the given title and message.
+    private void populateFormForEdit(Expense expense) {
+        datePicker.setValue(expense.getDate());
+        categoryComboBox.setValue(expense.getCategory());
+        amountField.setText(String.valueOf(expense.getAmount()));
+        descriptionField.setText(expense.getDescription());
+        currentlyEditing = expense;
+        addExpenseButton.setText("Update Expense");
+    }
+
+    private void clearInputFields() {
+        datePicker.setValue(null);
+        categoryComboBox.setValue(null);
+        amountField.clear();
+        descriptionField.clear();
+    }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
@@ -149,21 +148,14 @@ public class Expense_trackerController implements Initializable {
         alert.showAndWait();
     }
 
-    public double calculateTotalExpenses()
-    {
-        double total = 0.0;
-        for (Expense expense : expenseList)
-        {
-            total += expense.getAmount();
-        }
-        return total;
+    public double calculateTotalExpenses() {
+        return expenseList.stream().mapToDouble(Expense::getAmount).sum();
     }
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main_dashboard.fxml"));
         Parent viewRoot = loader.load();
-
         Scene scene = new Scene(viewRoot);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);

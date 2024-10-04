@@ -5,8 +5,10 @@
         <group>
             <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/PersonalFinanceManager.java</file>
             <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/Main_dashboardController.java</file>
+            <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/LoginController.java</file>
+            <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/Expense.java</file>
             <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/Expense_trackerController.java</file>
-            <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/OverviewController.java</file>
+            <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/SignupController.java</file>
         </group>
     </open-files>
 </project-private>
