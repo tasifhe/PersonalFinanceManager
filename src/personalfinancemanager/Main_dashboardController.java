@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 
 /**
  * FXML Controller class
@@ -39,6 +40,8 @@ public class Main_dashboardController implements Initializable {
     private Button btnSavingsGoals;
     @FXML
     private Button btnLogout;
+    @FXML
+    private Label userInfoLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -49,6 +52,10 @@ public class Main_dashboardController implements Initializable {
 //        // Default title for the dashboard
 //        dashboardTitle.setText("Main Dashboard");
 //    }
+    
+    public void setUserInfo(String fullName, String email) {
+        userInfoLabel.setText("User: " + fullName + "\nEmail: " + email);
+    }
 
     @FXML
     private void handleOverview(ActionEvent event) throws IOException {

@@ -53,9 +53,14 @@ public class LoginController implements Initializable {
 
         // Dummy authentication (replace with real authentication logic)
         if (username.equals("user") && password.equals("pass")) {
-            // If login successful, load the main dashboard
             try {
-                Parent dashboardRoot = FXMLLoader.load(getClass().getResource("main_dashboard.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("main_dashboard.fxml"));
+                Parent dashboardRoot = loader.load();
+
+                // Get the controller of the dashboard and pass user info
+                Main_dashboardController dashboardController = loader.getController();
+                dashboardController.setUserInfo("John Doe", "john.doe@example.com");
+
                 Scene dashboardScene = new Scene(dashboardRoot);
                 Stage stage = (Stage) loginButton.getScene().getWindow();
                 stage.setScene(dashboardScene);
@@ -63,8 +68,7 @@ public class LoginController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             // Show alert if login fails
             Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid username or password", ButtonType.OK);
             alert.showAndWait();

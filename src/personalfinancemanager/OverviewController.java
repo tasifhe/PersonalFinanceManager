@@ -4,13 +4,20 @@
  */
 package personalfinancemanager;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -54,5 +61,17 @@ public class OverviewController implements Initializable {
 
     void setExpenseTrackerController(Expense_trackerController controller) {
         this.expenseTrackerController = controller;
+    }
+
+    @FXML
+    private void handleBackButton(ActionEvent event) throws IOException {
+        // Load the main dashboard view
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("main_dashboard.fxml"));
+        Parent mainDashboardRoot = loader.load();
+
+        Scene scene = new Scene(mainDashboardRoot);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 }

@@ -45,12 +45,19 @@
         <!-- Main Content Area -->
         <VBox alignment="TOP_CENTER" layoutX="200.0" layoutY="60.0" prefHeight="540.0" prefWidth="800.0" spacing="10.0">
             <children>
+                <!-- Welcome message -->
                 <Label text="Welcome to your Dashboard!" textAlignment="CENTER">
                     <font>
                         <Font size="16.0" />
                     </font>
                 </Label>
-                <!-- Content dynamically loaded here -->
+
+                <!-- New Label for user info -->
+                <Label fx:id="userInfoLabel" textAlignment="CENTER" textFill="#34495E">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
             </children>
         </VBox>
     </children>
