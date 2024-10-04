@@ -18,10 +18,10 @@
                         <Font size="20.0" />
                     </font>
                 </Label>
-                <Button fx:id="btnOverview" mnemonicParsing="false" prefWidth="180.0" style="-fx-background-color: #34495E;" text="Overview" textFill="WHITE" />
-                <Button fx:id="btnExpenseTracker" mnemonicParsing="false" prefWidth="180.0" style="-fx-background-color: #34495E;" text="Expense Tracker" textFill="WHITE" />
-                <Button fx:id="btnSavingsGoals" mnemonicParsing="false" prefWidth="180.0" style="-fx-background-color: #34495E;" text="Savings Goals" textFill="WHITE" />
-                <Button fx:id="btnLogout" mnemonicParsing="false" prefWidth="180.0" style="-fx-background-color: #E74C3C;" text="Logout" textFill="WHITE" />
+                <Button fx:id="btnOverview" mnemonicParsing="false" onAction="#handleOverview" prefWidth="180.0" style="-fx-background-color: #34495E;" text="Overview" textFill="WHITE" />
+                <Button fx:id="btnExpenseTracker" mnemonicParsing="false" onAction="#handleExpenseTracker" prefWidth="180.0" style="-fx-background-color: #34495E;" text="Expense Tracker" textFill="WHITE" />
+                <Button fx:id="btnSavingsGoals" mnemonicParsing="false" onAction="#handleSavingsGoals" prefWidth="180.0" style="-fx-background-color: #34495E;" text="Savings Goals" textFill="WHITE" />
+                <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#handleLogout" prefWidth="180.0" style="-fx-background-color: #E74C3C;" text="Logout" textFill="WHITE" />
             </children>
             <padding>
                 <Insets left="10.0" top="20.0" />
@@ -43,7 +43,7 @@
         </HBox>
         
         <!-- Main Content Area -->
-        <VBox alignment="TOP_CENTER" layoutX="200.0" layoutY="60.0" prefHeight="540.0" prefWidth="600.0" spacing="10.0">
+        <VBox alignment="TOP_CENTER" layoutX="200.0" layoutY="60.0" prefHeight="540.0" prefWidth="800.0" spacing="10.0">
             <children>
                 <Label text="Welcome to your Dashboard!" textAlignment="CENTER">
                     <font>
