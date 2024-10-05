@@ -3,6 +3,8 @@ package personalfinancemanager;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +27,8 @@ public class MainDashboardController implements Initializable {
     @FXML private TextField balanceInputField;
 
     private double totalBalance = 0.0;
+    private ObservableList<Expense> expenseList = FXCollections.observableArrayList();
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -61,7 +65,13 @@ public class MainDashboardController implements Initializable {
 
     @FXML
     private void handleExpenseTracker(ActionEvent event) throws IOException {
-        loadView("expense_tracker.fxml", event);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("expense_tracker.fxml"));
+        Parent expenseRoot = loader.load();
+
+        ExpenseTrackerController expenseTrackerController = loader.getController();
+        expenseTrackerController.setExpenseList(expenseList);
+
+        loadScene(event, expenseRoot);
     }
 
     @FXML

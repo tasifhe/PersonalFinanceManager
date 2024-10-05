@@ -35,7 +35,8 @@ public class ExpenseTrackerController implements Initializable {
     @FXML private Button backButton;
     @FXML private VBox expenseTrackerController;
 
-    private ObservableList<Expense> expenseList = FXCollections.observableArrayList();
+    //private ObservableList<Expense> expenseList = FXCollections.observableArrayList();
+    private ObservableList<Expense> expenseList = SharedData.expenseList;
     private Expense currentlyEditing = null;
 
     private OverviewController overviewController;
@@ -175,4 +176,10 @@ public class ExpenseTrackerController implements Initializable {
         stage.setScene(new Scene(viewRoot));
         stage.show();
     }
+    public void setExpenseList(ObservableList<Expense> expenseList) {
+        this.expenseList.clear();
+        this.expenseList.addAll(expenseList);
+        expenseTable.setItems(this.expenseList);
+    }
+
 }
