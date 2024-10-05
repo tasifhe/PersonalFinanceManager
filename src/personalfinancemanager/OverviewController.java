@@ -62,6 +62,12 @@ public class OverviewController implements Initializable {
     void setExpenseTrackerController(Expense_trackerController controller) {
         this.expenseTrackerController = controller;
     }
+    public void updateExpenses() {
+    if (expenseTrackerController != null) {
+        double totalExpenses = expenseTrackerController.calculateTotalExpenses();
+        labelExpenses.setText("Total Expenses: $" + String.format("%.2f", totalExpenses));
+    }
+}
 
     @FXML
     private void handleBackButton(ActionEvent event) throws IOException {

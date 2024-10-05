@@ -42,6 +42,10 @@ public class Main_dashboardController implements Initializable {
     private Button btnLogout;
     @FXML
     private Label userInfoLabel;
+    
+    private double totalBalance = 0.0;
+    @FXML
+    private TextField balanceInputField;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -71,10 +75,12 @@ public class Main_dashboardController implements Initializable {
         Expense_trackerController expenseTrackerController = expenseLoader.getController();
 
         overviewController.setExpenseTrackerController(expenseTrackerController);
+        
+        expenseTrackerController.setOverviewController(overviewController);
 
-        double totalBalance = 5000.00;
+        //double totalBalance = thistotalBalance;
         double totalExpenses = expenseTrackerController.calculateTotalExpenses(); // Fixed the variable name
-        double totalSavings = 3500.00;
+        double totalSavings = totalBalance - totalExpenses;
 
         overviewController.updateOverview(totalBalance, totalExpenses, totalSavings);
 
@@ -115,5 +121,17 @@ public class Main_dashboardController implements Initializable {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    private void handleSetTotalBalance(ActionEvent event) {
+        // Handle setting total balance from input
+        String input = balanceInputField.getText();
+        try {
+            totalBalance = Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            // Handle invalid input
+            balanceInputField.setText("Invalid amount!");
+        }
     }
 }

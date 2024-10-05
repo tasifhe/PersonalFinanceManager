@@ -52,14 +52,14 @@ public class LoginController implements Initializable {
         String password = passwordField.getText();
 
         // Dummy authentication (replace with real authentication logic)
-        if (username.equals("user") && password.equals("pass")) {
+        if (username.equals("tasif") && password.equals("tasifhe")) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("main_dashboard.fxml"));
                 Parent dashboardRoot = loader.load();
 
                 // Get the controller of the dashboard and pass user info
                 Main_dashboardController dashboardController = loader.getController();
-                dashboardController.setUserInfo("John Doe", "john.doe@example.com");
+                dashboardController.setUserInfo("Tasif", "tasif@grandfleet.com");
 
                 Scene dashboardScene = new Scene(dashboardRoot);
                 Stage stage = (Stage) loginButton.getScene().getWindow();

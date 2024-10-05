@@ -37,7 +37,12 @@ public class Expense_trackerController implements Initializable {
 
     private ObservableList<Expense> expenseList;
     private Expense currentlyEditing = null;
+    
+    private OverviewController overviewController;
 
+    public void setOverviewController(OverviewController controller) {
+    this.overviewController = controller;
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         categoryComboBox.setItems(FXCollections.observableArrayList("Food", "Transport", "Utilities", "Entertainment", "Others"));
@@ -109,6 +114,10 @@ public class Expense_trackerController implements Initializable {
                 deleteButton.setOnAction(event -> {
                     Expense expense = getTableView().getItems().get(getIndex());
                     expenseList.remove(expense);
+                    
+                if (overviewController != null) {
+                overviewController.updateExpenses();
+    }
                 });
             }
 
