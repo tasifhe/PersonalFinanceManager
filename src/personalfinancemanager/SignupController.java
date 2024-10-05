@@ -60,43 +60,47 @@ public class SignupController implements Initializable {
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        // Basic validation (you can add more comprehensive checks here)
         if (fullName.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "All fields are required.", ButtonType.OK);
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "All fields are required.");
         } else if (!password.equals(confirmPassword)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Passwords do not match.", ButtonType.OK);
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Passwords do not match.");
         } else {
-            // Add user to database (dummy logic for now)
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Account created successfully!", ButtonType.OK);
-            alert.showAndWait();
-
-            // Redirect to login page
             try {
-                Parent loginRoot = FXMLLoader.load(getClass().getResource("login.fxml"));
-                Scene loginScene = new Scene(loginRoot);
-                Stage stage = (Stage) loginLink.getScene().getWindow();
-                stage.setScene(loginScene);
-                stage.show();
+                if (UserDataUtil.isUsernameTaken(username)) {
+                    showAlert(Alert.AlertType.ERROR, "Username is already taken.");
+                } else {
+                    User newUser = new User(fullName, email, username, password);
+                    UserDataUtil.saveUser(newUser);
+                    showAlert(Alert.AlertType.INFORMATION, "Account created successfully!");
+
+                    // Redirect to login page
+                    switchToLogin();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Error saving user data.");
             }
         }
     }
 
-    @FXML
-    private void handleLoginLink(ActionEvent event) {
-        // Load login page when user clicks on the login link
+    private void switchToLogin() {
         try {
             Parent loginRoot = FXMLLoader.load(getClass().getResource("login.fxml"));
             Scene loginScene = new Scene(loginRoot);
-            Stage stage = (Stage) loginLink.getScene().getWindow();
+            Stage stage = (Stage) signupButton.getScene().getWindow();
             stage.setScene(loginScene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType, message, ButtonType.OK);
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void handleLoginLink(ActionEvent event) {
+    }
+
 }

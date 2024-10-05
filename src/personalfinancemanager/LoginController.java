@@ -51,34 +51,34 @@ public class LoginController implements Initializable {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // Dummy authentication (replace with real authentication logic)
-        if (username.equals("tasif") && password.equals("tasifhe")) {
-            try {
+        try {
+            User user = UserDataUtil.authenticate(username, password);
+            if (user != null) {
+                // Login success, load dashboard
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("main_dashboard.fxml"));
                 Parent dashboardRoot = loader.load();
 
-                // Get the controller of the dashboard and pass user info
-                Main_dashboardController dashboardController = loader.getController();
-                dashboardController.setUserInfo("Tasif", "tasif@grandfleet.com");
+                // Pass user info to the dashboard
+                MainDashboardController dashboardController = loader.getController();
+                dashboardController.setUserInfo(user.getFullName(), user.getEmail());
 
                 Scene dashboardScene = new Scene(dashboardRoot);
                 Stage stage = (Stage) loginButton.getScene().getWindow();
                 stage.setScene(dashboardScene);
                 stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Invalid username or password.");
             }
-        } else {
-            // Show alert if login fails
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid username or password", ButtonType.OK);
-            alert.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error loading user data.");
         }
     }
 
     @FXML
     private void handleSignupLink(ActionEvent event) {
-        // Load signup page when user clicks on the signup link
         try {
+            // Load the signup page when the user clicks on the signup link
             Parent signupRoot = FXMLLoader.load(getClass().getResource("signup.fxml"));
             Scene signupScene = new Scene(signupRoot);
             Stage stage = (Stage) signupLink.getScene().getWindow();
@@ -86,6 +86,12 @@ public class LoginController implements Initializable {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Unable to load the signup page. Please try again.");
         }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType, message, ButtonType.OK);
+        alert.showAndWait();
     }
 }
