@@ -101,6 +101,17 @@ public class SignupController implements Initializable {
 
     @FXML
     private void handleLoginLink(ActionEvent event) {
+        try {
+            // Load the signup page when the user clicks on the signup link
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("login.fxml"));
+            Scene loginScene = new Scene(loginRoot);
+            Stage stage = (Stage) loginLink.getScene().getWindow();
+            stage.setScene(loginScene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Unable to load the signup page. Please try again.");
+        }
     }
 
 }

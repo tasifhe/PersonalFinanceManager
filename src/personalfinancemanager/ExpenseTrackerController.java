@@ -1,8 +1,14 @@
 package personalfinancemanager;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,6 +42,9 @@ public class ExpenseTrackerController implements Initializable {
     @FXML private VBox expenseTrackerController;
 
     //private ObservableList<Expense> expenseList = FXCollections.observableArrayList();
+    private static final String CSV_FILE_PATH = "expenses.csv";
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    
     private ObservableList<Expense> expenseList = SharedData.expenseList;
     private Expense currentlyEditing = null;
 
@@ -48,7 +57,9 @@ public class ExpenseTrackerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         categoryComboBox.setItems(FXCollections.observableArrayList("Food", "Transport", "Utilities", "Entertainment", "Others"));
+        
         initializeTableColumns();
+        loadExpensesFromCSV();
         expenseTable.setItems(expenseList);
         addActionColumn();
         addExpenseButton.setText("Add Expense");
@@ -71,9 +82,9 @@ public class ExpenseTrackerController implements Initializable {
         String description = descriptionField.getText();
 
         if (currentlyEditing == null) {
-            // Add new expense
             expenseList.add(new Expense(date, category, amount, description));
-        } else {
+        }
+        else {
             // Update existing expense
             currentlyEditing.setDate(date);
             currentlyEditing.setCategory(category);
@@ -82,7 +93,7 @@ public class ExpenseTrackerController implements Initializable {
             expenseTable.refresh();
             resetForm();
         }
-
+        saveExpensesToCSV();
         clearInputFields();
     }
 
@@ -164,6 +175,41 @@ public class ExpenseTrackerController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    
+    public void saveExpensesToCSV()
+    {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(CSV_FILE_PATH))) {
+            for (Expense expense : expenseList) {
+                String line = String.format("%s,%s,%.2f,%s",
+                        expense.getDate().format(DATE_FORMATTER),
+                        expense.getCategory(),
+                        expense.getAmount(),
+                        expense.getDescription());
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving expenses: " + e.getMessage());
+        }
+    }
+    
+    public void loadExpensesFromCSV() {
+        expenseList.clear();
+        //URI CSV_FILE_PATH;
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(CSV_FILE_PATH))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.split(",");
+                LocalDate date = LocalDate.parse(fields[0], DATE_FORMATTER);
+                String category = fields[1];
+                double amount = Double.parseDouble(fields[2]);
+                String description = fields[3];
+                expenseList.add(new Expense(date, category, amount, description));
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading expenses: " + e.getMessage());
+        }
+    }
 
     public double calculateTotalExpenses() {
         return expenseList.stream().mapToDouble(Expense::getAmount).sum();
@@ -181,5 +227,4 @@ public class ExpenseTrackerController implements Initializable {
         this.expenseList.addAll(expenseList);
         expenseTable.setItems(this.expenseList);
     }
-
 }

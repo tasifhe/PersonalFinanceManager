@@ -5,6 +5,8 @@
         <group>
             <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/PersonalFinanceManager.java</file>
             <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/MainDashboardController.java</file>
+            <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/Expense.java</file>
+            <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/OverviewController.java</file>
             <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/ExpenseTrackerController.java</file>
             <file>file:/G:/OOP_SD/FinalProject/PersonalFinanceManager/src/personalfinancemanager/SharedData.java</file>
         </group>
